@@ -47,6 +47,27 @@ namespace DeckofCards
             
         }
 
+        //Deals entire deck to 2 players
+        public void DealEntireDeck(Player p1, Player p2) {
+            //Make sure deck is full
+            int remainingCards = cards.Count;
+            for (int turn = 0; turn < remainingCards; turn++) {
+                if(turn % 2 == 0) {
+                    p1.AddToHand(draw());
+                } else {
+                    p2.AddToHand(draw());
+                }
+            }
+        }
+
+        //Deals entire deck across a list of players
+        public void DealEntireDeck(List<Player> players) {
+            int remainingCards = cards.Count;
+            for (int turn = 0; turn < remainingCards; turn++) {
+                players[turn % players.Count].AddToHand(draw());
+            }
+        }
+
         public override string ToString()
         {
             //build to display all cards

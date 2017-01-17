@@ -13,10 +13,17 @@ namespace DeckofCards
             name = n;
         }
 
-        public void Deal(Deck deck) {
-            for (int i=0; i < 26; i++) {
-            hand.Add(deck.draw());
-            }
+        //Adding this method to deck
+        // public void Deal(Deck deck) {
+        //     for (int i=0; i < 26; i++) {
+        //         hand.Add(deck.draw());
+        //     }
+        // }
+
+        public Card PlayTopCard(){
+            Card toPlay = hand[0];
+            hand.RemoveAt(0);
+            return toPlay;
         }
 
          public void AddToHand(Card card)

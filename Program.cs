@@ -7,66 +7,64 @@ namespace DeckofCards
     {
         public static void Main(string[] args)
         {
-            // Card myCard = new Card("Clubs", 6);
-            // Card myCard2 = new Card("Hearts", 1);
-            Deck myDeck = new Deck();
-            myDeck.shuffle();
-            // Console.WriteLine(myDeck);
-            // myDeck.deal();
-            // Console.WriteLine(myDeck.deal());
-            // Console.WriteLine(myDeck);
-            Player player1 = new Player("Dave");
-            Player player2 = new Player("Computer");
-            player1.Deal(myDeck);
-            player2.Deal(myDeck);
-            // Game myGame = new Game();
-            // player1.Game(player2);
             Console.WriteLine("Do you want to play?");
             string InputLine = Console.ReadLine();
-            while (InputLine == "Y") {
-            
-            Console.WriteLine("Player 1 has " + player1.hand[0] + " worth " + player1.hand[0].numVal);
-            Console.WriteLine("Player 2 has " + player2.hand[0] + " worth " + player2.hand[0].numVal);
-            if (player1.hand[0].numVal > player2.hand[0].numVal) {
-            Console.WriteLine("Player 1 wins!"); 
-                Card p1 = player1.hand[0];
-                Card p2 = player2.hand[0];
-                player1.hand.RemoveAt(0);
-                player2.hand.RemoveAt(0);
-                player1.AddToHand(p1);
-                player1.AddToHand(p2);
-                Console.WriteLine("Player 1 has " + player1.hand.Count + " cards in their deck! Player 2 has " + player2.hand.Count + " cards in their deck!");
-            }
-            else if (player1.hand[0].numVal < player2.hand[0].numVal) {
-                Console.WriteLine("Player 2 wins!");
-                Card p1 = player1.hand[0];
-                Card p2 = player2.hand[0];
-                player1.hand.RemoveAt(0);
-                player2.hand.RemoveAt(0);
-                player2.AddToHand(p1);
-                player2.AddToHand(p2); 
-            Console.WriteLine("Player 1 has " + player1.hand.Count + " cards in their deck! Player 2 has " + player2.hand.Count + " cards in their deck!"); }
-            else { Console.WriteLine("There's a tie! Each player gets their card back.");
-                Card p1 = player1.hand[0];
-                Card p2 = player2.hand[0];
-                player1.hand.RemoveAt(0);
-                player2.hand.RemoveAt(0);
-                player1.AddToHand(p1);
-                player2.AddToHand(p2); 
-                    Console.WriteLine("Player 1 has " + player1.hand.Count + " cards in their deck! Player 2 has " + player2.hand.Count + " cards in their deck!"); 
-                }
-            if (player1.hand.Count == 0) {
-            Console.WriteLine("Player 2 wins! Game Over!"); 
-            break; }
-            if (player2.hand.Count == 0) {
-            Console.WriteLine("Player 1 wins! Game Over!"); 
-            break; }
+            //Updated to cover more variations
+            while (InputLine.ToLower() == "y" || InputLine.ToLower() == "yes") {
+                //Initialize after confirming they are playing
+                Deck myDeck = new Deck();
+                myDeck.shuffle();
 
-            Console.WriteLine("Do you want to play?"); 
-            InputLine = Console.ReadLine();
+                Player player1 = new Player("Dave");
+                Player player2 = new Player("Computer");
+                myDeck.DealEntireDeck(player1, player2);
+                
+                while(player1.hand.Count > 0 && player2.hand.Count > 0) {
+                    //Immediately hold the top card for each player
+                    Card p1Card = player1.PlayTopCard();
+                    Card p2Card = player2.PlayTopCard();
+
+                    Console.WriteLine("Player 1 has " + p1Card + " worth " + p1Card.numVal);
+                    Console.WriteLine("Player 2 has " + p2Card + " worth " + p2Card.numVal);
+
+
+                    if (p1Card.numVal > p2Card.numVal) {
+                        Console.WriteLine("Player 1 wins!"); 
+                        player1.AddToHand(p1Card);
+                        player1.AddToHand(p2Card);
+                        Console.WriteLine("Player 1 has " + player1.hand.Count + " cards in their deck! Player 2 has " + player2.hand.Count + " cards in their deck!");
+                    }
+                    else if (p1Card.numVal < p2Card.numVal) {
+                        Console.WriteLine("Player 2 wins!");
+                        player2.AddToHand(p1Card);
+                        player2.AddToHand(p2Card); 
+                    Console.WriteLine("Player 1 has " + player1.hand.Count + " cards in their deck! Player 2 has " + player2.hand.Count + " cards in their deck!"); }
+                    else {
+                        Console.WriteLine("There's a tie! Each player gets their card back.");
+                        player1.AddToHand(p1Card);
+                        player2.AddToHand(p2Card); 
+                        Console.WriteLine("Player 1 has " + player1.hand.Count + " cards in their deck! Player 2 has " + player2.hand.Count + " cards in their deck!"); 
+                    }
+
+                    if (player1.hand.Count == 0) {
+                        Console.WriteLine("Player 2 wins! Game Over!"); 
+                    }
+                    if (player2.hand.Count == 0) {
+                        Console.WriteLine("Player 1 wins! Game Over!"); 
+                    }
+                    Console.WriteLine("Press enter to flip next card!\n");
+                    Console.ReadLine();
+                }
+
+                Console.WriteLine("Do you want to play again?"); 
+                InputLine = Console.ReadLine();
             }
             Console.WriteLine("Doot!");
-            }
         }
     }
+}
+
+//This was all really good and you were right there were your implementation
+//Just needed to add that while loop to check if either player's hand had run out!
+//Need to still add War logic though, since games will never end without it (if both sides have an ace)
     
